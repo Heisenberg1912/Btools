@@ -2,7 +2,9 @@
  * PowerPoint Report Generator using pptxgenjs
  */
 
-import PptxGenJS from 'pptxgenjs';
+// @ts-ignore - pptxgenjs types issue
+import PptxGenJSModule from 'pptxgenjs';
+const PptxGenJS = PptxGenJSModule.default || PptxGenJSModule;
 import fs from 'fs';
 import path from 'path';
 import { config } from '../../../config/index.js';

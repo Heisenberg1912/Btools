@@ -61,7 +61,7 @@ const subscriptionRoutes: FastifyPluginAsync = async (fastify) => {
       preHandler: [requireAuth],
     },
     async (request) => {
-      const subscription = request.user?.subscription || {};
+      const subscription = (request.user?.subscription || {}) as Record<string, unknown>;
       return {
         plan: subscription.plan || 'free',
         status: subscription.status || 'active',
@@ -81,10 +81,10 @@ const subscriptionRoutes: FastifyPluginAsync = async (fastify) => {
       preHandler: [requireAuth],
     },
     async (request) => {
-      const subscription = request.user?.subscription || {};
-      const scansUsed = subscription.scans_used || 0;
-      const scansLimit = subscription.scans_limit || 3;
-      const plan = subscription.plan || 'free';
+      const subscription = (request.user?.subscription || {}) as Record<string, unknown>;
+      const scansUsed = (subscription.scans_used as number) || 0;
+      const scansLimit = (subscription.scans_limit as number) || 3;
+      const plan = (subscription.plan as string) || 'free';
 
       return {
         scans_used: scansUsed,

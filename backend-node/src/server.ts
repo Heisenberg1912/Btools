@@ -66,7 +66,7 @@ app.addHook('onRequest', async () => {
 });
 
 // Error handler
-app.setErrorHandler((error, request, reply) => {
+app.setErrorHandler((error: Error & { validation?: unknown; statusCode?: number }, request, reply) => {
   console.error('[Error]', error);
 
   // Zod validation errors
