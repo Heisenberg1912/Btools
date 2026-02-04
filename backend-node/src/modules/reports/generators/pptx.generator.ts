@@ -91,7 +91,7 @@ export async function generatePPTX(
       ['Time Remaining', data.timeRemaining || 'Unknown'],
       ['Critical Path', data.criticalPath || 'N/A'],
       ['Delays Flagged', String(data.delaysFlagged || 0)],
-    ];
+    ] as any;
 
     progressSlide.addTable(progressRows, {
       x: 0.5,
@@ -123,7 +123,7 @@ export async function generatePPTX(
         ['Budget Remaining', `$${(fin.budgetRemaining as number || 0).toLocaleString()}`],
         ['Cost Overrun', `${fin.costOverrun || 0}%`],
         ['Cash Flow Health', String(fin.cashFlowHealth || 'N/A')],
-      ];
+      ] as any;
 
       finSlide.addTable(finRows, {
         x: 0.5,
@@ -156,7 +156,7 @@ export async function generatePPTX(
         ['Unskilled', String(mp.unskilled || 0)],
         ['Safety Score', `${mp.safetyScore || 0}%`],
         ['Productivity Index', `${mp.productivityIndex || 0}%`],
-      ];
+      ] as any;
 
       mpSlide.addTable(mpRows, {
         x: 0.5,
@@ -188,7 +188,7 @@ export async function generatePPTX(
         ['Sustainability Rating', String(comp.sustainabilityRating || 'N/A')],
         ['Code Violations', String(comp.codeViolations || 0)],
         ['Embodied Carbon', String(comp.embodiedCarbon || 'N/A')],
-      ];
+      ] as any;
 
       compSlide.addTable(compRows, {
         x: 0.5,
