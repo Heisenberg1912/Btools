@@ -49,6 +49,7 @@ coverage/
 # OS files
 Thumbs.db
 .DS_Store
+.gemini-clipboard
 
 # Package manager lock files (optional - uncomment if you want to ignore)
 # package-lock.json
