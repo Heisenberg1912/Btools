@@ -27,7 +27,9 @@ export function LandingPage({ onImageSelect, onNavigateToLogin, onNavigateToSign
     if (showCamera) {
       const initCamera = async () => {
         try {
-          const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+          const mediaStream = await navigator.mediaDevices.getUserMedia({ 
+            video: { facingMode: "environment" } 
+          });
           setStream(mediaStream);
         } catch (err) {
           console.error("Camera Error:", err);

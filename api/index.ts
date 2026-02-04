@@ -32,13 +32,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Ensure the app is ready
     await app.ready();
 
+    // Strip hop-by-hop headers that must not be forwarded.
+    // content-length will mismatch when Vercel already parsed the body into an
+    // object — Fastify re-serialises it and the byte length changes.
+    const { 'content-length': _cl, 'transfer-encoding': _te, ...forwardHeaders } = req.headers;
+
+    // Vercel pre-parses JSON bodies into objects; Fastify inject expects a
+    // string payload when content-type is application/json.
+    const payload = req.body != null && typeof req.body === 'object'
+      ? JSON.stringify(req.body)
+      : req.body;
+
     // Handle the request using Fastify's inject method for serverless
     const response = await app.inject({
       method: req.method as any,
       url: req.url || '/',
-      headers: req.headers as any,
-      payload: req.body,
-      query: req.query as any,
+      headers: forwardHeaders as any,
+      payload,
     });
 
     // Set response headers

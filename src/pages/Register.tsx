@@ -30,7 +30,7 @@ export function Register({ onSwitchToLogin, onSuccess }: RegisterProps) {
 
     setIsLoading(true);
 
-    const result = await register(email, password, name);
+    const result = await register(email.trim(), password, name.trim());
 
     if (result.success) {
       onSuccess();
@@ -86,6 +86,11 @@ export function Register({ onSwitchToLogin, onSuccess }: RegisterProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="you@example.com"
+                autoComplete="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                inputMode="email"
                 required
               />
             </div>
@@ -101,6 +106,10 @@ export function Register({ onSwitchToLogin, onSuccess }: RegisterProps) {
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-12"
                   placeholder="Create a password"
+                  autoComplete="new-password"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
                   required
                 />
                 <button
@@ -127,6 +136,10 @@ export function Register({ onSwitchToLogin, onSuccess }: RegisterProps) {
                     : 'border-gray-600'
                 }`}
                 placeholder="Confirm your password"
+                autoComplete="new-password"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
                 required
               />
             </div>

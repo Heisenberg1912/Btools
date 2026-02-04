@@ -20,7 +20,7 @@ export function Login({ onSwitchToRegister, onSuccess }: LoginProps) {
     setError('');
     setIsLoading(true);
 
-    const result = await login(email, password);
+    const result = await login(email.trim(), password);
 
     if (result.success) {
       onSuccess();
@@ -62,6 +62,11 @@ export function Login({ onSwitchToRegister, onSuccess }: LoginProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="you@example.com"
+                autoComplete="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                inputMode="email"
                 required
               />
             </div>
@@ -77,6 +82,10 @@ export function Login({ onSwitchToRegister, onSuccess }: LoginProps) {
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-12"
                   placeholder="Enter your password"
+                  autoComplete="current-password"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
                   required
                 />
                 <button
