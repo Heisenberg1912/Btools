@@ -213,6 +213,4 @@ This project is proprietary software.
 
 Project Link: [https://github.com/Heisenberg1912/Btools](https://github.com/Heisenberg1912/Btools)
 
----
 
-Built with ❤️ using Claude Code
