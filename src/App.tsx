@@ -162,8 +162,10 @@ function AppContent() {
     setCurrentProjectId(null)
   }
 
-  const isPaywalled = usageCount >= scanLimit
-  const scansRemaining = Math.max(0, scanLimit - usageCount)
+  // Check if plan has unlimited scans (scans_limit = -1 means unlimited)
+  const hasUnlimitedScans = scanLimit === -1 || currentPlan === 'pro' || currentPlan === 'enterprise'
+  const isPaywalled = !hasUnlimitedScans && usageCount >= scanLimit
+  const scansRemaining = hasUnlimitedScans ? Infinity : Math.max(0, scanLimit - usageCount)
 
   // Show loading while checking auth
   if (authLoading) {
@@ -281,7 +283,11 @@ function AppContent() {
 
          <div className="flex items-center gap-4">
             <span className="text-sm text-slate-500 hidden md:inline">
-               {isPaywalled ? 'Plan Limit Reached' : `${scansRemaining} scans remaining`}
+               {hasUnlimitedScans
+                 ? 'Unlimited scans'
+                 : isPaywalled
+                   ? 'Plan Limit Reached'
+                   : `${scansRemaining} scans remaining`}
             </span>
             <Button onClick={() => setUploadModalOpen(true)} className="bg-blue-600 hover:bg-blue-700">
                <Upload className="h-4 w-4 mr-2" /> New Scan

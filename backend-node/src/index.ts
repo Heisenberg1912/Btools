@@ -46,9 +46,9 @@ const app = Fastify({
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
-// Register plugins
+// Register plugins - Allow all origins
 await app.register(cors, {
-  origin: config.CORS_ORIGINS_ARRAY,
+  origin: true, // Allow all origins
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],

@@ -1,13 +1,21 @@
 import { z } from 'zod';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-dotenv.config();
+// Get directory path for ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load .env from project root (one level up from backend-node)
+// In production/Vercel, env vars are injected directly
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
 const envSchema = z.object({
   // App
   APP_NAME: z.string().default('VitruviAI'),
   APP_VERSION: z.string().default('1.0.0'),
-  DEBUG: z.string().transform(v => v === 'true').default('true'),
+  DEBUG: z.string().transform(v => v === 'true').default('false'),
   PORT: z.string().transform(Number).default('3001'),
 
   // MongoDB
@@ -38,8 +46,9 @@ const envSchema = z.object({
   // Redis
   REDIS_URL: z.string().default('redis://localhost:6379/0'),
 
-  // CORS
-  CORS_ORIGINS: z.string().default('http://localhost:5173,http://localhost:5175,http://localhost:3000'),
+  // CORS - No longer used (origin: true allows all)
+  // Kept for backwards compatibility
+  CORS_ORIGINS: z.string().optional(),
 
   // Marketplace Integration
   MARKETPLACE_URL: z.string().default('http://localhost:5175'),
@@ -62,7 +71,8 @@ if (!parsed.success) {
 
 export const config = {
   ...parsed.data,
-  CORS_ORIGINS_ARRAY: parsed.data.CORS_ORIGINS.split(',').map(s => s.trim()),
+  // CORS_ORIGINS_ARRAY kept for backwards compatibility but not used
+  CORS_ORIGINS_ARRAY: parsed.data.CORS_ORIGINS?.split(',').map(s => s.trim()) || ['*'],
 };
 
 export type Config = typeof config;

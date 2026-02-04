@@ -1,11 +1,19 @@
 /**
  * MongoDB service - Primary database for VitruviAI.
  * Port of Python mongodb_service.py
+ *
+ * Optimized for serverless (Vercel) with connection caching
  */
 
 import { MongoClient, Db, ObjectId, WithId, Document } from 'mongodb';
 import { config } from '../config/index.js';
 
+// Global connection cache for serverless environments
+// These persist between invocations in the same container
+let cachedClient: MongoClient | null = null;
+let cachedDb: Db | null = null;
+
+// For backwards compatibility
 let client: MongoClient | null = null;
 let db: Db | null = null;
 
@@ -17,14 +25,48 @@ export async function connectMongoDB(): Promise<void> {
     return;
   }
 
+  // Return cached connection if available and connected
+  if (cachedClient && cachedDb) {
+    try {
+      // Verify connection is still alive
+      await cachedDb.command({ ping: 1 });
+      client = cachedClient;
+      db = cachedDb;
+      console.log(`[MongoDB] Using cached connection to: ${config.MONGODB_DB}`);
+      return;
+    } catch {
+      // Connection stale, reconnect
+      console.log('[MongoDB] Cached connection stale, reconnecting...');
+      cachedClient = null;
+      cachedDb = null;
+    }
+  }
+
   try {
-    client = new MongoClient(config.MONGODB_URI);
-    await client.connect();
-    db = client.db(config.MONGODB_DB);
-    await db.command({ ping: 1 });
+    // Create new client with serverless-optimized settings
+    const newClient = new MongoClient(config.MONGODB_URI, {
+      maxPoolSize: 10,
+      minPoolSize: 1,
+      maxIdleTimeMS: 60000,
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 10000,
+    });
+
+    await newClient.connect();
+    const newDb = newClient.db(config.MONGODB_DB);
+    await newDb.command({ ping: 1 });
+
+    // Cache the connection
+    cachedClient = newClient;
+    cachedDb = newDb;
+    client = newClient;
+    db = newDb;
+
     console.log(`[MongoDB] Connected to: ${config.MONGODB_DB}`);
   } catch (error) {
     console.error('[MongoDB] Failed to connect:', error);
+    cachedClient = null;
+    cachedDb = null;
     client = null;
     db = null;
   }
