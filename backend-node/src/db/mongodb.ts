@@ -62,6 +62,10 @@ export async function connectMongoDB(): Promise<void> {
     client = newClient;
     db = newDb;
 
+    // Ensure indexes exist (idempotent, no-op if already created)
+    await newDb.collection('users').createIndex({ email: 1 }, { unique: true, background: true });
+    await newDb.collection('projects').createIndex({ user_id: 1 }, { background: true });
+
     console.log(`[MongoDB] Connected to: ${config.MONGODB_DB}`);
   } catch (error) {
     console.error('[MongoDB] Failed to connect:', error);

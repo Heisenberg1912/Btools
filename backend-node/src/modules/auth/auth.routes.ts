@@ -128,9 +128,10 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
         });
       }
 
-      // Update last login
       const userId = user._id.toString();
-      await mongodb.updateLastLogin(userId);
+
+      // Fire-and-forget: don't block the login response on this write
+      mongodb.updateLastLogin(userId);
 
       // Create tokens
       const accessToken = await createAccessToken(userId);
@@ -148,54 +149,33 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
     }
   );
 
-  // POST /api/auth/login (alias for login/json)
-  app.post(
-    '/login',
-    {
-      schema: {
-        body: loginSchema,
-      },
-    },
-    async (request, reply) => {
-      const { email, password } = request.body;
+  // POST /api/auth/login (alias — same logic as /login/json)
+  app.post('/login', { schema: { body: loginSchema } }, async (request, reply) => {
+    const { email, password } = request.body;
 
-      const user = await mongodb.getUserByEmail(email);
-
-      if (!user) {
-        return reply.status(401).send({
-          detail: 'Incorrect email or password',
-        });
-      }
-
-      const passwordValid = await verifyPassword(password, user.password || '');
-      if (!passwordValid) {
-        return reply.status(401).send({
-          detail: 'Incorrect email or password',
-        });
-      }
-
-      const isActive = user.isActive ?? user.is_active ?? true;
-      if (!isActive) {
-        return reply.status(403).send({
-          detail: 'User account is disabled',
-        });
-      }
-
-      const userId = user._id.toString();
-      await mongodb.updateLastLogin(userId);
-
-      const accessToken = await createAccessToken(userId);
-      const refreshTokenStr = await createRefreshToken(userId);
-
-      const response: TokenResponse = {
-        access_token: accessToken,
-        refresh_token: refreshTokenStr,
-        token_type: 'bearer',
-      };
-
-      return response;
+    const user = await mongodb.getUserByEmail(email);
+    if (!user) {
+      return reply.status(401).send({ detail: 'Incorrect email or password' });
     }
-  );
+
+    const passwordValid = await verifyPassword(password, user.password || '');
+    if (!passwordValid) {
+      return reply.status(401).send({ detail: 'Incorrect email or password' });
+    }
+
+    const isActive = user.isActive ?? user.is_active ?? true;
+    if (!isActive) {
+      return reply.status(403).send({ detail: 'User account is disabled' });
+    }
+
+    const userId = user._id.toString();
+    mongodb.updateLastLogin(userId); // fire-and-forget
+
+    const accessToken = await createAccessToken(userId);
+    const refreshToken = await createRefreshToken(userId);
+
+    return { access_token: accessToken, refresh_token: refreshToken, token_type: 'bearer' } as TokenResponse;
+  });
 
   // POST /api/auth/refresh
   app.post(

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Upload, Camera, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -20,7 +20,33 @@ export function LandingPage({ onImageSelect, onNavigateToLogin, onNavigateToSign
   const [activeTool, setActiveTool] = useState<string | null>(null);
   const [isHovering, setIsHovering] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  const [stream, setStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (showCamera) {
+      const initCamera = async () => {
+        try {
+          const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+          setStream(mediaStream);
+        } catch (err) {
+          console.error("Camera Error:", err);
+        }
+      };
+      initCamera();
+    } else {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        setStream(null);
+      }
+    }
+  }, [showCamera]);
+
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream, showCamera]);
 
   const handleToolSelect = (toolId: string) => {
     setActiveTool(toolId);
@@ -35,15 +61,6 @@ export function LandingPage({ onImageSelect, onNavigateToLogin, onNavigateToSign
         setActiveTool(null);
       };
       reader.readAsDataURL(file);
-    }
-  };
-
-  const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      if (videoRef.current) videoRef.current.srcObject = stream;
-    } catch (err) {
-      console.error("Camera Error:", err);
     }
   };
 
@@ -82,7 +99,7 @@ export function LandingPage({ onImageSelect, onNavigateToLogin, onNavigateToSign
       <header className="px-6 py-4 flex items-center justify-between bg-white/80 backdrop-blur-md border-b sticky top-0 z-50">
         <div className="flex items-center gap-2">
            <div className="h-9 w-9 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-sm">V</div>
-           <span className="text-xl font-bold tracking-tight text-slate-900">Btools</span>
+           <span className="text-xl font-bold tracking-tight text-slate-900">VitruviAI</span>
         </div>
         <div className="flex gap-4 items-center">
            {isAuthenticated ? (
@@ -151,7 +168,7 @@ export function LandingPage({ onImageSelect, onNavigateToLogin, onNavigateToSign
 
               <div className="mt-4">
                  <Card 
-                   className={`border-2 border-dashed transition-all duration-300 cursor-pointer overflow-hidden ${isHovering ? 'border-blue-500 bg-blue-50/50' : 'border-slate-200 bg-slate-50'}`}
+                   className={`border-2 border-dashed transition-all duration-300 cursor-pointer overflow-hidden ${isHovering ? 'border-blue-500 bg-blue-50/50' : 'border-slate-200'}`}
                    onDragOver={(e) => { e.preventDefault(); setIsHovering(true); }}
                    onDragLeave={() => setIsHovering(false)}
                    onDrop={(e) => {
@@ -219,7 +236,7 @@ export function LandingPage({ onImageSelect, onNavigateToLogin, onNavigateToSign
                  </div>
               </div>
               <div className="flex gap-2 justify-end mt-4">
-                 <Button variant="ghost" onClick={() => { setShowCamera(false); if (videoRef.current && videoRef.current.srcObject) { (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop()); } }}>Cancel</Button>
+                 <Button variant="ghost" onClick={() => setShowCamera(false)}>Cancel</Button>
                  <Button onClick={capturePhoto}>Capture Photo</Button>
               </div>
            </DialogContent>
@@ -230,7 +247,7 @@ export function LandingPage({ onImageSelect, onNavigateToLogin, onNavigateToSign
       <footer className="py-8 bg-white border-t mt-auto">
            <div className="container mx-auto px-4 text-center text-slate-500 text-sm">
               <p className="flex items-center justify-center gap-6">
-                 <span>© 2026 Btools Inc.</span>
+                 <span>© 2026 VitruviAI Inc.</span>
                  <a href="#" className="hover:text-slate-900 transition-colors">Privacy</a>
                  <a href="#" className="hover:text-slate-900 transition-colors">Terms</a>
                  <a href="#" className="hover:text-slate-900 transition-colors">Enterprise</a>

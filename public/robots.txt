@@ -1,0 +1,27 @@
+# Robots.txt for Btools - Construction Intelligence Platform
+# https://btools-matters.vercel.app
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /*.json$
+
+# Sitemaps
+Sitemap: https://btools-matters.vercel.app/sitemap.xml
+
+# Crawl-delay (optional, for polite crawling)
+Crawl-delay: 1
+
+# Allow search engine bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /

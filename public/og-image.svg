@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#60a5fa"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid pattern -->
+  <defs>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#1e293b" stroke-width="0.5" opacity="0.8"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Accent bar top -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#accent)"/>
+
+  <!-- Logo mark -->
+  <rect x="120" y="200" width="48" height="48" rx="10" fill="url(#accent)"/>
+  <text x="144" y="235" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#ffffff">B</text>
+
+  <!-- Brand name -->
+  <text x="190" y="240" font-family="Arial, sans-serif" font-size="42" font-weight="bold" fill="#ffffff">Btools</text>
+
+  <!-- Divider -->
+  <rect x="120" y="275" width="80" height="3" rx="1.5" fill="url(#accent)"/>
+
+  <!-- Main headline -->
+  <text x="120" y="360" font-family="Arial, sans-serif" font-size="38" font-weight="bold" fill="#f1f5f9">AI-Powered Construction</text>
+  <text x="120" y="410" font-family="Arial, sans-serif" font-size="38" font-weight="bold" fill="#f1f5f9">Intelligence Platform</text>
+
+  <!-- Subtext -->
+  <text x="120" y="475" font-family="Arial, sans-serif" font-size="20" fill="#94a3b8">Site analysis · Progress tracking · Budget forecasting · Safety audits</text>
+
+  <!-- Feature pills right side -->
+  <rect x="750" y="180" width="180" height="50" rx="25" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="790" cy="205" r="12" fill="#3b82f6"/>
+  <text x="810" y="210" font-family="Arial, sans-serif" font-size="16" fill="#e2e8f0">AI Analysis</text>
+
+  <rect x="750" y="250" width="180" height="50" rx="25" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="790" cy="275" r="12" fill="#10b981"/>
+  <text x="810" y="280" font-family="Arial, sans-serif" font-size="16" fill="#e2e8f0">Real-Time</text>
+
+  <rect x="750" y="320" width="180" height="50" rx="25" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="790" cy="345" r="12" fill="#f59e0b"/>
+  <text x="810" y="350" font-family="Arial, sans-serif" font-size="16" fill="#e2e8f0">Safety First</text>
+
+  <rect x="750" y="390" width="180" height="50" rx="25" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="790" cy="415" r="12" fill="#8b5cf6"/>
+  <text x="810" y="420" font-family="Arial, sans-serif" font-size="16" fill="#e2e8f0">Predictive</text>
+
+  <!-- Bottom URL -->
+  <text x="120" y="580" font-family="Arial, sans-serif" font-size="16" fill="#475569">btools-matters.vercel.app</text>
+</svg>

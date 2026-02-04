@@ -50,18 +50,18 @@ app.register(multipart, {
 });
 
 // Connect to MongoDB on first request (connection pooling for serverless)
-let isConnecting = false;
-let isConnected = false;
+// Single promise shared by all concurrent requests during cold start —
+// prevents the race where a second request skips the await and hits db = null.
+let connectionPromise: Promise<void> | null = null;
 
 app.addHook('onRequest', async () => {
-  if (!isConnected && !isConnecting) {
-    isConnecting = true;
-    try {
-      await connectMongoDB();
-      isConnected = isMongoConnected();
-    } finally {
-      isConnecting = false;
+  if (!isMongoConnected()) {
+    if (!connectionPromise) {
+      connectionPromise = connectMongoDB().finally(() => {
+        if (!isMongoConnected()) connectionPromise = null; // allow retry on failure
+      });
     }
+    await connectionPromise;
   }
 });
 
