@@ -97,7 +97,7 @@ app.addHook('onClose', async () => {
 });
 
 // Error handler
-app.setErrorHandler((error, request, reply) => {
+app.setErrorHandler((error: any, request, reply) => {
   console.error('[Error]', error);
 
   // Zod validation errors

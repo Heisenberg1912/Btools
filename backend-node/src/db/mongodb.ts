@@ -306,14 +306,53 @@ export interface ProjectData {
   criticalPath: string;
   delaysFlagged: number;
   burnRate: number;
-  manpower: Record<string, unknown>;
-  machinery: Record<string, unknown>;
-  materials: Record<string, unknown>[];
-  financials: Record<string, unknown>;
-  valuation: Record<string, unknown>;
-  compliance: Record<string, unknown>;
-  geo: Record<string, unknown>;
-  charts: Record<string, unknown>;
+  manpower: {
+    total: number;
+    skilled: number;
+    unskilled: number;
+    safetyScore: number;
+    productivityIndex: number;
+    idleWorkers: number;
+    skillDistribution: { name: string; count: number }[];
+    [key: string]: any;
+  };
+  machinery: {
+    activeUnits: number;
+    utilization: number;
+    maintenanceAlerts: number;
+    fuelConsumption: number;
+    efficiencyRatio: number;
+    [key: string]: any;
+  };
+  materials: {
+    name: string;
+    allocated: number;
+    used: number;
+    wastage: number;
+    risk: string;
+    [key: string]: any;
+  }[];
+  financials: {
+    budgetTotal: number;
+    budgetSpent: number;
+    budgetRemaining: number;
+    costOverrun: number;
+    projectedFinalCost?: number;
+    roiProjection: number;
+    cashFlowHealth: string;
+    monthlyCashFlow: { month: string; inflow: number; outflow: number }[];
+    [key: string]: any;
+  };
+  valuation: {
+    current: number;
+    landValue: number;
+    projectedCompletedValue: number;
+    nearbyTransactions: { address: string; price: number; date: string }[];
+    [key: string]: any;
+  };
+  compliance: Record<string, any>;
+  geo: Record<string, any>;
+  charts: Record<string, any>;
   insights: string[];
 }
 

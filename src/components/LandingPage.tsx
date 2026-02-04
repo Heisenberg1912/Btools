@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { motion } from 'framer-motion';
 import { ToolsGrid } from './ToolsGrid';
+import { UserMenu } from '@/components/ui/user-menu';
 
 interface LandingPageProps {
   onImageSelect: (src: string, toolId?: string) => void;
@@ -85,17 +86,7 @@ export function LandingPage({ onImageSelect, onNavigateToLogin, onNavigateToSign
         </div>
         <div className="flex gap-4 items-center">
            {isAuthenticated ? (
-             <div className="flex items-center gap-4">
-                <div className="flex items-center gap-3 bg-slate-50 py-1.5 px-3 rounded-full border border-slate-100">
-                   <div className="h-7 w-7 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-sm">
-                      {user?.name?.charAt(0) || 'U'}
-                   </div>
-                   <span className="text-sm font-semibold text-slate-700 hidden sm:inline">{user?.name || 'User'}</span>
-                </div>
-                <Button variant="ghost" onClick={onLogout} className="text-slate-500 hover:text-slate-900 hover:bg-slate-100">
-                   Log out
-                </Button>
-             </div>
+             <UserMenu user={user} onLogout={onLogout} />
            ) : (
              <>
                <Button 
