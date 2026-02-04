@@ -298,7 +298,7 @@ const projectRoutes: FastifyPluginAsync = async (fastify) => {
         progressPercentage: analysisResult.progressPercentage,
         confidence_score: analysisResult.confidence_score,
         insights: analysisResult.insights,
-        project_data: analysisResult.project_data,
+        project_data: analysisResult.project_data ?? undefined,
         raw_response: analysisResult.raw_response,
         is_valid: true,
       };
@@ -343,7 +343,7 @@ const projectRoutes: FastifyPluginAsync = async (fastify) => {
         manpower: analysisResult.project_data?.manpower,
         machinery: analysisResult.project_data?.machinery,
         financials: analysisResult.project_data?.financials,
-        project_data: analysisResult.project_data,
+        project_data: (analysisResult.project_data ?? undefined) as unknown as Record<string, unknown> | undefined,
       };
 
       await mongodb.createAnalysisHistory(projectId, userId, snapshot, deltas);
@@ -357,7 +357,7 @@ const projectRoutes: FastifyPluginAsync = async (fastify) => {
         progress_detected: analysisResult.progressPercentage,
         confidence_score: analysisResult.confidence_score,
         insights: analysisResult.insights,
-        project_data: analysisResult.project_data,
+        project_data: (analysisResult.project_data ?? {}) as Record<string, unknown>,
         created_at: new Date().toISOString(),
       };
 

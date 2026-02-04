@@ -276,8 +276,15 @@ Return ONLY valid JSON, no markdown.`;
       efficiencyRatio: aiMachinery.utilization || 0,
     };
 
-    // Build materials
-    const materials = (aiResult.materials as Record<string, unknown>[]) || [];
+    // Build materials - map to proper typed structure
+    const rawMaterials = (aiResult.materials as Record<string, unknown>[]) || [];
+    const materials = rawMaterials.map((m) => ({
+      name: (m.name as string) || 'Unknown',
+      allocated: (m.allocated as number) || 0,
+      used: (m.used as number) || 0,
+      wastage: (m.wastage as number) || 0,
+      risk: (m.risk as string) || 'Low',
+    }));
 
     // Build financials
     const aiFinancials = (aiResult.financials as Record<string, number>) || {};
